@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Environment variables
+.env
+
+# Build output
+dist/
+build/
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/

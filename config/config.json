@@ -8,8 +8,8 @@
   },
   "test": {
     "username": "root",
-    "password": null,
-    "database": "database_test",
+    "password": "Oemry241995@",
+    "database": "ecommerce_server",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

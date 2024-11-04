@@ -6,6 +6,7 @@ const app = express();
 
 // routes
 const user = require("./routes");
+const auth = require("./routes");
 
 // setting
 app.use(express.urlencoded({ extended: true }));
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));
 
 app.use("/api/users", user.UserRoute);
+app.use("/api/auth", auth.AuthRoute);
 
 const PORT = process.env.PORT;
 

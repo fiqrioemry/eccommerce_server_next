@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.UserRoles, { foreignKey: "roleId" });
       this.hasOne(models.UserProfiles);
       this.hasOne(models.Tokens);
-      this.hasOne(models.Stores);
+      this.hasOne(models.Stores, { foreignKey: "userId" });
       this.hasMany(models.Reviews);
       this.hasMany(models.Orders);
       this.hasMany(models.Carts);

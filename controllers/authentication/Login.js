@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const {
   Users,
   UserRoles,
@@ -16,7 +15,6 @@ module.exports = async (req, res) => {
 
     const user = await Users.findOne({
       where: { email },
-      attributes: ["id", "email", "password"],
       include: [
         {
           model: UserProfiles,
@@ -41,17 +39,17 @@ module.exports = async (req, res) => {
     // Check if password matches
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return res.status(400).json({ message: "Incorrect password" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
     const userId = user.id;
     const userEmail = user.email;
-    const userRole = user.UserRoles?.name; // assuming UserRole is singular
-    const storeId = user.Stores?.id;
-    const storeName = user.Stores?.storeName;
-    const userName = user.UserProfiles?.name;
+    const userRole = user.UserRole?.name; // Perbaikan di sini
+    const storeId = user.Store?.id; // Pastikan ada relasi
+    const storeName = user.Store?.storeName; // Pastikan ada relasi
+    const userName = user.UserProfile?.name; // Perbaikan di sini
 
-    const AccessToken = jwt.sign(
+    const accessToken = jwt.sign(
       { userId, userName, userEmail, userRole, storeId, storeName },
       process.env.ACCESS_TOKEN,
       { expiresIn: "1h" }
@@ -68,20 +66,21 @@ module.exports = async (req, res) => {
     });
 
     if (refreshTokenData) {
-      await refreshTokenData.update({ token: refreshToken });
+      await refreshTokenData.update({ refreshToken }); // Hanya refreshToken yang diperbarui
     } else {
-      await Tokens.create({ userId: user.id, token: refreshToken });
+      await Tokens.create({ userId: user.id, refreshToken });
     }
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production", // Pastikan untuk menggunakan secure di produksi
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 hari
     });
 
     return res.status(200).send({
       message: "Login successful",
       data: {
-        token: AccessToken,
+        accessToken,
         user: {
           userId,
           userName,

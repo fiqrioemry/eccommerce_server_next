@@ -2,7 +2,7 @@ const { Users, UserRoles, UserProfiles } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user.userId;
     const user = await Users.findOne({
       where: { id: userId },
       include: [

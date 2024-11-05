@@ -3,30 +3,29 @@ const { Products, Images, sequelize } = require("../../models");
 module.exports = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const storeId = req.user.storeId;
-
-    console.log(req.files);
-
-    const image = req.files || req.file;
+    const id = req.user.storeId;
 
     const { name, description, price, stock, categoryId } = req.body;
 
-    if (!name || !image || !description || !price || !stock || !categoryId) {
-      return res.status(400).send({ message: "All fields are required" });
+    if (!id) {
+      return res.status(400).send({ error: "Store not found" });
     }
 
-    if (!storeId) {
-      return res.status(400).send({ error: "you don't have a store" });
+    if (req.files.length === 0) {
+      return res.status(400).send({ error: "Must upload an image" });
     }
 
-    const product = await Products.create({
-      name,
-      description,
-      price,
-      stock,
-      storeId,
-      categoryId,
-    });
+    const product = await Products.create(
+      {
+        name,
+        description,
+        price,
+        stock,
+        storeId: id,
+        categoryId,
+      },
+      { transaction: t }
+    );
 
     // mapping the array of images from payload
     const images = req.files.map((file) => ({

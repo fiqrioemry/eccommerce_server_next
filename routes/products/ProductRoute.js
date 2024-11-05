@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/", productsController.GetAllProducts);
 
+router.get("/:id", productsController.GetProductDetails);
+
 router.post(
   "/create",
   isAuthenticate,
@@ -18,4 +20,6 @@ router.put(
   FileUpload.array("images"),
   productsController.UpdateProduct
 );
+
+router.get("/delete/:[id]", isAuthenticate, productsController.DeleteProducts);
 module.exports = router;

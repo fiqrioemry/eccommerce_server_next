@@ -3,28 +3,28 @@ const categoryController = require("../../controllers/categories");
 const { isAdmin, isAuthenticate, FileUpload } = require("../../middleware");
 const router = express.Router();
 
+router.get("/", categoryController.GetAllCategories);
+
 router.post(
-  "/",
+  "/create",
   isAuthenticate,
   isAdmin,
   FileUpload.single("image"),
   categoryController.CreateNewCategory
 );
 
-router.get("/", categoryController.GetAllCategories);
-
-// router.put(
-//   "/:id",
-//   middleware.isAuthenticate,
-//   middleware.isAdmin,
-//   middleware.FileUpload.single("image"),
-//   categoryController.UpdateCategory
-// );
-// router.delete(
-//   "/:id",
-//   middleware.isAuthenticate,
-//   middleware.isAdmin,
-//   categoryController.DeleteCategory
-// );
+router.put(
+  "/update/:id",
+  isAuthenticate,
+  isAdmin,
+  FileUpload.single("image"),
+  categoryController.UpdateCategory
+);
+router.delete(
+  "/delete/:id",
+  isAuthenticate,
+  isAdmin,
+  categoryController.UpdateCategory
+);
 
 module.exports = router;

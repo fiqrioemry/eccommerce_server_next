@@ -17,6 +17,7 @@ app.use(cookies());
 app.use("/api/users", service.UserRoute);
 app.use("/api/auth", service.AuthRoute);
 app.use("/api/category", service.CategoryRoute);
+app.use("/api/product", service.ProductRoute);
 
 const PORT = process.env.PORT;
 

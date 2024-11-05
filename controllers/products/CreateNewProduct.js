@@ -1,19 +1,22 @@
-const { Products, ProductGalleries, sequelize } = require("../../models");
+const { Products, Images, sequelize } = require("../../models");
 
 module.exports = async (req, res) => {
+  const t = await sequelize.transaction();
   try {
-    const id = req.user.storeId;
+    const storeId = req.user.storeId;
+
+    console.log(req.files);
+
+    const image = req.files || req.file;
 
     const { name, description, price, stock, categoryId } = req.body;
 
-    if (!id) {
-      return res.status(400).send({ error: "you don't have a store" });
+    if (!name || !image || !description || !price || !stock || !categoryId) {
+      return res.status(400).send({ message: "All fields are required" });
     }
 
-    if (req.files.length === 0) {
-      return res
-        .status(400)
-        .send({ error: "You must upload at least 1 image" });
+    if (!storeId) {
+      return res.status(400).send({ error: "you don't have a store" });
     }
 
     const product = await Products.create({
@@ -21,7 +24,7 @@ module.exports = async (req, res) => {
       description,
       price,
       stock,
-      storeId: id,
+      storeId,
       categoryId,
     });
 
@@ -31,12 +34,13 @@ module.exports = async (req, res) => {
       productId: product.id,
     }));
 
-    await ProductGalleries.bulkCreate(images, { transaction: t });
+    await Images.bulkCreate(images, { transaction: t });
 
     await t.commit();
 
     return res.status(201).send({
-      message: "successfully created",
+      success: true,
+      message: "Product is created",
       data: product,
     });
   } catch (error) {

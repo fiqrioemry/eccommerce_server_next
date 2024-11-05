@@ -1,20 +1,27 @@
 const { Categories } = require("../../models");
 const createSlug = require("../../utils/CreateSlug");
+const removeCloudinaryImage = require("../../utils/RemoveCloudImage");
 
 module.exports = async (req, res) => {
   try {
-    const image = req.file.path;
     const { name } = req.body;
+    const image = req.file.path;
     const slug = createSlug(name);
 
-    const existingCategory = await Categories.findOne({ where: { slug } });
-    if (existingCategory) {
-      return res.status(400).send({
-        success: false,
-        message: "Category with this name already exists",
-      });
+    if (!name || !image) {
+      return res.status(400).send({ message: "All fields are required" });
     }
 
+    // cek di database apakah sudah ada category dengan nama slug yang sama
+    const existingCategory = await Categories.findOne({
+      where: { slug },
+    });
+    if (existingCategory) {
+      removeCloudinaryImage(image); //<--- hapus file.path yang telah diupload terlebih dahulu
+      return res
+        .status(400)
+        .send({ success: false, message: "Category name already exists" });
+    }
     const category = await Categories.create({
       name,
       image,

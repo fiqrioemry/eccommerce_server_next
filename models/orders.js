@@ -31,10 +31,15 @@ module.exports = (sequelize, DataTypes) => {
       totalPay: DataTypes.INTEGER,
       orderStatus: {
         type: DataTypes.ENUM,
-        values: ["pending", "shipped", "delivered", "cancelled"],
+        values: ["pending", "shipped", "failed", "success"],
         defaultValue: "pending",
       },
-    },
+      shipmentStatus: {
+        type: DataTypes.ENUM,
+        values: ["waiting_payment", "in-process", "in-shipped", "delivered", "cancelled"],
+        defaultValue: "waiting_payment",
+      },
+  
     {
       sequelize,
       modelName: "Orders",

@@ -1,10 +1,23 @@
-const { Products, Images } = require("../../models");
+const {
+  Products,
+  Images,
+  Reviews,
+  Categories,
+  OrderDetails,
+  Stores,
+} = require("../../models");
 
 module.exports = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Products.findByPk(id, {
-      include: [{ model: Images }],
+      include: [
+        { model: Images },
+        { model: OrderDetails },
+        { model: Reviews },
+        { model: Categories },
+        { model: Stores },
+      ],
     });
 
     if (!product)
@@ -13,19 +26,30 @@ module.exports = async (req, res) => {
         message: "Product not found",
       });
 
-    const storeId = product.storeId;
-    const categoryId = product.categoryId;
-    const name = product.name;
-    const description = product.description;
-    const price = product.description;
-    const stock = product.stock;
-    const images = product.Images.map((item) => {
-      return item.image;
-    });
+    const data = {
+      id: product.id,
+      title: product.name,
+      category: product.Category?.name || null,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      images: product.Images?.map((img) => img.image) || [],
+      sold:
+        product.OrderDetails?.reduce(
+          (total, detail) => total + detail.quantity,
+          0
+        ) || 0,
+      reviews: product.Reviews || [],
+      storeId: product.storeId,
+      storeName: product.storeName,
+      storeCity: product.Store?.city || null,
+      storeImage: product.Store?.image || null,
+    };
+
     return res.status(200).send({
       success: true,
       message: "success",
-      data: { storeId, categoryId, name, description, price, stock, images },
+      data: data,
     });
   } catch (error) {
     return res.status(500).send(error.message);

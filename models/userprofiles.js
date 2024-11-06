@@ -24,6 +24,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: DataTypes.INTEGER,
       name: DataTypes.STRING,
+      birthDay: DataTypes.STRING,
+      city: DataTypes.STRING,
+      gender: {
+        type: DataTypes.ENUM,
+        values: ["male", "female"],
+        allowNull: true,
+      },
       address: DataTypes.TEXT,
     },
     {

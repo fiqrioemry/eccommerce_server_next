@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.UserRoles, { foreignKey: "roleId" });
       this.hasOne(models.UserProfiles, { foreignKey: "userId" });
-      this.hasOne(models.Tokens);
+      this.hasOne(models.Tokens, { foreignKey: "userId" });
       this.hasOne(models.Stores, { foreignKey: "userId" });
-      this.hasMany(models.Reviews);
-      this.hasMany(models.Orders);
-      this.hasMany(models.Carts);
-      this.hasMany(models.ResetTokens);
+      this.hasMany(models.Reviews, { foreignKey: "userId" });
+      this.hasMany(models.Orders, { foreignKey: "userId" });
+      this.hasMany(models.Carts, { foreignKey: "userId" });
+      this.hasMany(models.ResetTokens, { foreignKey: "userId" });
     }
   }
   Users.init(

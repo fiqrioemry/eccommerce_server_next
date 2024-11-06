@@ -3,15 +3,14 @@ const { Products, Images, sequelize } = require("../../models");
 module.exports = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const id = req.user.storeId;
+    const storeId = req.user.storeId;
+
+    const images = req.files;
 
     const { name, description, price, stock, categoryId } = req.body;
 
-    if (!id) {
-      return res.status(400).send({ error: "Store not found" });
-    }
-
-    if (req.files.length === 0) {
+    if (images.length === 0) {
+      await t.rollback();
       return res.status(400).send({ error: "Must upload an image" });
     }
 
@@ -21,26 +20,24 @@ module.exports = async (req, res) => {
         description,
         price,
         stock,
-        storeId: id,
+        storeId,
         categoryId,
       },
       { transaction: t }
     );
 
-    // mapping the array of images from payload
-    const images = req.files.map((file) => ({
+    const productImages = images.map((file) => ({
       image: file.path,
       productId: product.id,
     }));
 
-    await Images.bulkCreate(images, { transaction: t });
+    await Images.bulkCreate(productImages, { transaction: t });
 
     await t.commit();
 
     return res.status(201).send({
       success: true,
       message: "Product is created",
-      data: product,
     });
   } catch (error) {
     await t.rollback();

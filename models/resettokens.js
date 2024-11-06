@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ResetTokens extends Model {
     static associate(models) {
-      this.belongsTo(models.Users, { foreignKey: "userId", as: "Users" }); // Pastikan menggunakan
+      this.belongsTo(models.Users, { foreignKey: "userId" }); // Pastikan menggunakan
     }
   }
   ResetTokens.init(

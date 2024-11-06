@@ -9,18 +9,22 @@ const {
 
 module.exports = async (req, res) => {
   try {
+    const { slug } = req.params;
+
+    const category = await Categories.findOne({ where: { slug: slug } });
+
     const product = await Products.findAll({
+      where: { categoryId: category.id },
       include: [
         {
           model: Stores,
         },
         { model: Images },
         { model: Categories },
-        { model: OrderDetails },
         { model: Reviews },
+        { model: OrderDetails },
       ],
     });
-
     const data = product.map((item) => {
       return {
         id: item.id,
@@ -40,6 +44,11 @@ module.exports = async (req, res) => {
         storeCity: item.Store.city,
         storeImage: item.Store.image,
       };
+    });
+    return res.status(200).send({
+      success: true,
+      message: "success",
+      data: data,
     });
     return res.status(200).send({
       success: true,

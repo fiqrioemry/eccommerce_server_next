@@ -44,15 +44,15 @@ module.exports = async (req, res) => {
 
     const userId = user.id;
     const userEmail = user.email;
-    const userRole = user.UserRole?.name; // Perbaikan di sini
-    const storeId = user.Store?.id; // Pastikan ada relasi
-    const storeName = user.Store?.storeName; // Pastikan ada relasi
-    const userName = user.UserProfile?.name; // Perbaikan di sini
+    const userRole = user.UserRole?.name;
+    const storeId = user.Store?.id;
+    const storeName = user.Store?.storeName;
+    const userName = user.UserProfile?.name;
 
     const accessToken = jwt.sign(
       { userId, userName, userEmail, userRole, storeId, storeName },
       process.env.ACCESS_TOKEN,
-      { expiresIn: "1h" }
+      { expiresIn: "30d" }
     );
 
     const refreshToken = jwt.sign(

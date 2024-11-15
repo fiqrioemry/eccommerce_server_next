@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const {
   Products,
   Stores,
@@ -9,6 +10,29 @@ const {
 
 module.exports = async (req, res) => {
   try {
+    const {
+      limit,
+      page,
+      search,
+      category,
+      minPrice,
+      maxPrice,
+      minScore,
+      maxScore,
+    } = req.query;
+
+    const dataPerPage = parseInt(limit) || 10;
+    const currentPage = parseInt(page) || 0;
+    const offset = currentPage - 1 * dataPerPage;
+
+    const query = {};
+    if (search) {
+      query[Op.or] = [
+        { name: { [Op.like]: `%${search}%` } },
+        { description: { [Op.like]: `${search}` } },
+      ];
+    }
+
     const product = await Products.findAll({
       include: [
         {
@@ -34,7 +58,9 @@ module.exports = async (req, res) => {
           (total, item) => (total += item.quantity),
           0
         ),
-        reviews: item.Reviews,
+        averageScore:
+          item.Reviews.reduce((total, acc) => (total += acc.rating), 0) /
+          item.Reviews.length,
         storeId: item.storeId,
         storeName: item.storeName,
         storeCity: item.Store.city,

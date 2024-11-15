@@ -24,7 +24,7 @@ router.delete(
   "/delete/:id",
   isAuthenticate,
   isAdmin,
-  categoryController.UpdateCategory
+  categoryController.DeleteCategory
 );
 
 module.exports = router;

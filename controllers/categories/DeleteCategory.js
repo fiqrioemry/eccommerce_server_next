@@ -1,19 +1,17 @@
-const { ProductCategory } = require("../../models");
+const { Categories } = require("../../models");
 const removeCloudinaryImage = require("../../utils/RemoveCloudImage");
 
 module.exports = async (req, res) => {
   try {
     const { id } = req.params;
-    const category = await ProductCategory.findByPk(id);
+    const category = await Categories.findByPk(id);
 
     if (!category) {
       return res.status(404).send({ message: "Category not found" });
     }
 
-    // Menunggu penghapusan gambar dari Cloudinary
     removeCloudinaryImage(category.image);
 
-    // Menghapus kategori
     await category.destroy();
 
     return res.status(200).send({

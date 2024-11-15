@@ -9,6 +9,9 @@ module.exports = async (req, res) => {
 
     const { name, description, price, stock, categoryId } = req.body;
 
+    if (!name || !description || !price || !stock || !categoryId)
+      return res.status(400).send({ message: "All fields are required" });
+
     if (images.length === 0) {
       await t.rollback();
       return res.status(400).send({ error: "Must upload an image" });

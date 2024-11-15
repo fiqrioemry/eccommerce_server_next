@@ -5,7 +5,7 @@ const removeCloudinaryImage = require("../../utils/RemoveCloudImage");
 module.exports = async (req, res) => {
   try {
     const { name } = req.body;
-    const image = req.file.path;
+    const image = req.file?.path;
     const slug = createSlug(name);
 
     if (!name || !image) {
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
       removeCloudinaryImage(image);
       return res
         .status(400)
-        .send({ success: false, message: "Category name already exists" });
+        .send({ success: false, message: "Category name is exists" });
     }
     const category = await Categories.create({
       name,
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
     return res.status(201).send({
       success: true,
-      message: "New Category is successfully created",
+      message: "New Category is created",
       data: category,
     });
   } catch (error) {

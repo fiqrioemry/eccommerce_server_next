@@ -12,12 +12,11 @@ module.exports = async (req, res) => {
       return res.status(400).send({ message: "All fields are required" });
     }
 
-    // cek di database apakah sudah ada category dengan nama slug yang sama
     const existingCategory = await Categories.findOne({
       where: { slug },
     });
     if (existingCategory) {
-      removeCloudinaryImage(image); //<--- hapus file.path yang telah diupload terlebih dahulu
+      removeCloudinaryImage(image);
       return res
         .status(400)
         .send({ success: false, message: "Category name already exists" });

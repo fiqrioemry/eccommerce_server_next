@@ -19,6 +19,7 @@ app.use("/api/auth", service.AuthRoute);
 app.use("/api/category", service.CategoryRoute);
 app.use("/api/product", service.ProductRoute);
 app.use("/api/cart", service.CartRoute);
+app.use("/api/order", service.OrderRoute);
 
 const PORT = process.env.PORT;
 

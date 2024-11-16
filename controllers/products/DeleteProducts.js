@@ -1,4 +1,4 @@
-const { Products, Images, sequelize } = require("../../models");
+const { Products, Images, Reviews, Carts, sequelize } = require("../../models");
 const removeCloudinaryImage = require("../../utils/RemoveCloudImage");
 
 module.exports = async (req, res) => {
@@ -6,42 +6,53 @@ module.exports = async (req, res) => {
   try {
     const { ids } = req.body;
 
-    // 1.get all the products by ids
-    const product = await Products.findAll({ where: { id: ids } });
+    // 1. Get all products
+    const products = await Products.findAll({ where: { id: ids } });
 
-    // 2. make sure the products is exist
-    if (product.length === 0) {
+    // 2. Check if products exist
+    if (products.length === 0) {
+      await t.rollback();
       return res.status(404).send({ message: "Product not found" });
     }
-    // 3. make sure only admin and user with the same storeId as storeId in product has access to delete
-    if (req.user.userRole !== "admin") {
-      const unauthorized = product.some((item) => item.storeId !== storeId);
+
+    // 3. Validate access
+    if (req.user.userRole !== "Admin") {
+      const unauthorized = products.some(
+        (item) => item.storeId !== req.user?.storeId
+      );
       if (unauthorized) {
+        await t.rollback();
         return res.status(401).send({ message: "Unauthorized" });
       }
     }
-    // 4. destroy all images on model Images
-    await Images.destroy({ where: { productId: ids } }, { transaction: t });
 
-    // 5. destroy all products on model products
-    await Products.destroy({ where: { id: ids } }, { transaction: t });
+    // 4. Delete related models
+    await Images.destroy({ where: { productId: ids }, transaction: t });
+    await Reviews.destroy({ where: { productId: ids }, transaction: t });
+    await Carts.destroy({ where: { productId: ids }, transaction: t });
+    await Products.destroy({ where: { id: ids }, transaction: t });
 
-    // 6. delete all url saved / related to cloud storage
-    t.afterCommit(() => {
-      productImages.forEach(async (image) => {
-        removeCloudinaryImage(image.image);
-      });
-    });
-
-    // 7. commit all the process
+    // 5. Commit transaction
     await t.commit();
+
+    // 6. Delete related cloudinary images after commit
+    const productImages = products.flatMap((product) => product.images || []); // Adjust if your images are stored differently
+    for (const image of productImages) {
+      try {
+        removeCloudinaryImage(image.image);
+      } catch (err) {
+        console.error(`Failed to delete image: ${image.image}`, err);
+      }
+    }
 
     return res.status(200).send({
       success: true,
       message: "Product is deleted",
     });
   } catch (error) {
-    await t.rollback();
-    return res.status(500).send(error.message);
+    if (!t.finished) {
+      await t.rollback();
+    }
+    return res.status(500).send({ message: error.message });
   }
 };

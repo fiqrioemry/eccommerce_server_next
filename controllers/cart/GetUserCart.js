@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
     return res.status(200).send({
       success: true,
       message: "success",
-      data: cartItem.length === 0 ? "Empty cart" : cartData,
+      data: cartItem.length === 0 ? "Cart is empty" : cartData,
     });
   } catch (error) {
     return res.status(500).send({ message: error.message });

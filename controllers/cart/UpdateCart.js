@@ -6,11 +6,6 @@ module.exports = async (req, res) => {
     const { quantity } = req.body;
     const userId = req.user.userId;
 
-    if (!quantity)
-      return res
-        .status(400)
-        .send({ success: false, message: "Cart not found" });
-
     let cartItem = await Carts.findOne({ where: { id, userId } });
 
     if (!cartItem)

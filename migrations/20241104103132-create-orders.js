@@ -37,8 +37,21 @@ module.exports = {
 
       orderStatus: {
         type: Sequelize.ENUM,
-        values: ["pending", "shipped", "delivered", "cancelled"],
+        values: ["pending", "challange", "failed", "success"],
         defaultValue: "pending",
+        allowNull: false,
+      },
+
+      shipmentStatus: {
+        type: Sequelize.ENUM,
+        values: [
+          "waiting_payment",
+          "processing",
+          "shipped",
+          "delivered",
+          "cancelled",
+        ],
+        defaultValue: "waiting_payment",
         allowNull: false,
       },
       createdAt: {

@@ -15,9 +15,8 @@ const {
 module.exports = async (req, res) => {
   // const t = await sequelize.transaction();
   try {
-    console.log("PASSED");
-    const userId = req.user.userId;
     const { orders } = req.body;
+
     return res.status(200).send({ message: "success", data: orders });
   } catch (error) {
     await t.rollback();

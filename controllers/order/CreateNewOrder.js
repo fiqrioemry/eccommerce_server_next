@@ -4,6 +4,7 @@ const {
   UserProfiles,
   Orders,
   OrderDetails,
+  Stores,
   Carts,
   sequelize,
 } = require("../../models");
@@ -17,10 +18,10 @@ const {
 module.exports = async (req, res) => {
   const t = await sequelize.transaction();
   const userId = req.user.userId;
-  const { orderCartId, address } = req.body;
+  const { orderCartId, customerAddress } = req.body;
 
   try {
-    const user = await Users.findByPk({
+    const user = await Users.findOne({
       where: { id: userId },
       include: [{ model: UserProfiles, attributes: ["name"] }],
     });
@@ -28,18 +29,44 @@ module.exports = async (req, res) => {
     const customerName = user.UserProfile?.name;
     // 1. get product detail from user selected cart for order
     const orderItem = await Carts.findAll({
-      where: { id: orderCartId, userId },
+      where: { userId, id: orderCartId },
+      attributes: ["id", "quantity"],
+      include: [
+        {
+          model: Products,
+          attributes: ["id", "name", "price", "storeId", "stock"],
+        },
+      ],
     });
 
-    const orders = orderItem.reduce((acc, curr) => {
-      const newOrder = acc.find((entry) => entry.storeId === curr.storeId);
+    const newOrders = orderItem.reduce((acc, curr) => {
+      const newOrder = acc.find(
+        (entry) => entry.storeId === curr.Product.storeId
+      );
       if (!newOrder) {
-        acc.push({});
+        const totalPrice = curr.Product.price * curr.quantity;
+        const shipmentCost = totalPrice * 0.025;
+        const totalPay = totalPrice + shipmentCost;
+
+        acc.push({
+          userId,
+          storeId: curr.Product.storeId,
+          customerName,
+          customerAddress,
+          totalPrice,
+          shipmentCost,
+          totalPay,
+        });
+      } else {
+        newOrder.totalPrice += curr.Product.price * curr.quantity;
+        newOrder.shipmentCost = newOrder.totalPrice * 0.025;
       }
-    });
+      return acc;
+    }, []);
+
     return res.status(200).send({
       message: "Order created successfully",
-      data: orderItem,
+      data: newOrders,
     });
   } catch (error) {
     await t.rollback();

@@ -1,80 +1,48 @@
 const {
   Users,
+  Products,
   UserProfiles,
   Orders,
   OrderDetails,
+  Carts,
   sequelize,
 } = require("../../models");
-const midtransClient = require("midtrans-client");
+// const midtransClient = require("midtrans-client");
 
-const snap = new midtransClient.Snap({
-  isProduction: false,
-  serverKey: process.env.SERVER_KEY,
-});
+// const snap = new midtransClient.Snap({
+//   isProduction: false,
+//   serverKey: process.env.SERVER_KEY,
+// });
 
 module.exports = async (req, res) => {
   const t = await sequelize.transaction();
   const userId = req.user.userId;
-  const { orderRequests } = req.body;
+  const { orderCartId, address } = req.body;
+
   try {
-    const user = await Users.findOne({
+    const user = await Users.findByPk({
       where: { id: userId },
-      include: [
-        {
-          model: UserProfiles,
-          attributes: ["name", "address"],
-        },
-      ],
+      include: [{ model: UserProfiles, attributes: ["name"] }],
     });
 
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
-    }
+    const customerName = user.UserProfile?.name;
+    // 1. get product detail from user selected cart for order
+    const orderItem = await Carts.findAll({
+      where: { id: orderCartId, userId },
+    });
 
-    const customerName = user.UserProfile.name;
-    const customerEmail = user.email;
-    const customerAddress = user.UserProfile.address;
-
-    const results = orderRequests.reduce((acc, item) => {
-      const existing = acc.find((entry) => entry.storeId === item.storeId);
-
-      if (existing) {
-        existing.totalPrice += item.price * item.quantity;
-      } else {
-        const totalPrice = item.price * item.quantity;
-        const shipmentCost = totalPrice * 0.025;
-
-        acc.push({
-          userId,
-          storeId: item.storeId,
-          customerName,
-          customerAddress,
-          totalPrice,
-          shipmentCost,
-          totalPay: totalPrice + shipmentCost,
-        });
+    const orders = orderItem.reduce((acc, curr) => {
+      const newOrder = acc.find((entry) => entry.storeId === curr.storeId);
+      if (!newOrder) {
+        acc.push({});
       }
-
-      return acc;
-    }, []);
-
-    const orders = await Orders.bulkcreate({ results }, { transaction: t });
-
-    const parameters = {
-      transaction_details: {
-        order_id: orders.id,
-        gross_amount: orders.reduce((acc, curr) => acc + curr.totalPay, 0),
-      },
-      customer_details: {
-        customerName,
-        customerEmail,
-        customerAddress,
-      },
-    };
-    const transaction = await snap.createTransaction(parameters);
-
-    return res.status(200).send({ message: "request success", data: results });
+    });
+    return res.status(200).send({
+      message: "Order created successfully",
+      data: orderItem,
+    });
   } catch (error) {
-    return res.status(500).send({ message: "Internal server error", error });
+    await t.rollback();
+    return res.status(500).send(error.message);
   }
 };

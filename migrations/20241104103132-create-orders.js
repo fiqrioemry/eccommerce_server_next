@@ -46,6 +46,7 @@ module.exports = {
         type: Sequelize.ENUM,
         values: [
           "waiting_payment",
+          "waiting_seller",
           "processing",
           "shipped",
           "delivered",

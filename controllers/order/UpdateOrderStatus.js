@@ -21,27 +21,19 @@ module.exports = async (req, res) => {
     let orderStatus = "";
     let shipmentStatus = "waiting_payment";
     if (transactionStatus == "capture") {
-      // capture only applies to card transaction, which you need to check for the fraudStatus
       if (fraudStatus == "challenge") {
-        // TODO set transaction status on your databaase to 'challenge'
         orderStatus = "challenge";
       } else if (fraudStatus == "accept") {
-        // TODO set transaction status on your databaase to 'success'
         orderStatus = "success";
         shipmentStatus = "processing";
       }
     } else if (transactionStatus == "settlement") {
       orderStatus = "success";
       shipmentStatus = "processing";
-    } else if (transactionStatus == "deny") {
-      // TODO you can ignore 'deny', because most of the time it allows payment retries
-      // and later can become success
     } else if (transactionStatus == "cancel" || transactionStatus == "expire") {
-      // TODO set transaction status on your databaase to 'failure'
       orderStatus = "failed";
       shipmentStatus = "cancelled";
     } else if (transactionStatus == "pending") {
-      // TODO set transaction status on your databaase to 'pending' / waiting payment
       orderStatus = "pending";
     }
 

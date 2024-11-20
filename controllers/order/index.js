@@ -4,7 +4,6 @@ const UpdateOrderStatus = require("./UpdateOrderStatus");
 
 // TODO : remove the testing route
 const NewOrderTest = require("./CreateOrderTest");
-const TransactionTest = require("./TransactionTest");
 
 module.exports = {
   CreateNewOrder,
@@ -13,5 +12,4 @@ module.exports = {
 
   // TODO : Remove this testing route
   NewOrderTest,
-  TransactionTest,
 };

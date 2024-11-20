@@ -1,7 +1,6 @@
 const CreateNewOrder = require("./CreateNewOrder");
 const GetUserOrders = require("./GetUserOrders");
-const UpdateOrderStatus = require("./UpdateOrderStatus"); // TODO : Setting is not
-//
+const UpdateOrderStatus = require("./UpdateOrderStatus");
 
 // TODO : remove the testing route
 const NewOrderTest = require("./CreateOrderTest");

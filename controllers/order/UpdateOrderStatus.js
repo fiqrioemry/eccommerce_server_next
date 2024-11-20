@@ -19,6 +19,7 @@ module.exports = async (req, res) => {
     let fraudStatus = statusResponse.fraud_status;
 
     let orderStatus = "";
+
     if (transactionStatus == "capture") {
       // capture only applies to card transaction, which you need to check for the fraudStatus
       if (fraudStatus == "challenge") {
@@ -57,7 +58,10 @@ module.exports = async (req, res) => {
     });
 
     if (orderStatus === "success") {
-      orders.update({ shippingStatus: "new" }, { where: { id: orderId } });
+      orders.update(
+        { shippingStatus: "processing" },
+        { where: { id: orderId } }
+      );
     } else if (orderStatus === "failed") {
       orders.forEach(async (item) => {
         const { id, quantity } = item;
@@ -67,10 +71,13 @@ module.exports = async (req, res) => {
       });
     }
 
-    await Orders.update({ orderStatus }, { where: { id: orderId } });
+    await Orders.update(
+      { orderStatus, shipmentStatus },
+      { where: { id: orderId } }
+    );
 
     return res.status(200).send({
-      message: "Order status updated",
+      message: "Order status is updated",
     });
   } catch (error) {
     return res.status(500).send(error.message);

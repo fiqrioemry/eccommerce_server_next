@@ -4,7 +4,7 @@ const { isAuthenticate } = require("../../middleware");
 const router = express.Router();
 
 router.post("/new", isAuthenticate, ordersController.CreateNewOrder);
-router.put("/notification", ordersController.UpdateOrderStatus);
+router.post("/notification", ordersController.UpdateOrderStatus);
 
 // TODO : route not tested yet
 router.get("/", isAuthenticate, ordersController.GetUserOrders);

@@ -9,12 +9,12 @@ module.exports = async (req, res) => {
     const slug = createSlug(name);
     const image = req.file?.path;
 
-    // 1. check field not blank
+    // 1. check field not blank ...
     if (!name || !image) {
       return res.status(400).send({ message: "All fields are required" });
     }
 
-    // 2. check id from request is exist
+    // 2. check id from request is exist ...
     const oldCategory = await Categories.findByPk(id);
 
     if (!oldCategory) {
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
         .send({ success: false, message: "Category not found" });
     }
 
-    // 3. check category not duplicate name
+    // 3. check category not duplicate name ...
     const existingCategory = await Categories.findOne({ where: { slug } });
 
     if (existingCategory && existingCategory.id !== oldCategory.id) {
@@ -35,14 +35,14 @@ module.exports = async (req, res) => {
         .send({ success: false, message: "Category name already exists" });
     }
 
-    // 4. remove old image from cloud
+    // 4. remove old image from cloud ...
     if (image && oldCategory.image !== image) {
       if (oldCategory.image) {
         removeCloudinaryImage(oldCategory.image);
       }
     }
 
-    // 5. update with new data
+    // 5. update with new data ...
     const updatedCategory = await oldCategory.update({ name, image, slug });
 
     return res.status(200).send({

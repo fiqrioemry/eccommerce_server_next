@@ -11,5 +11,4 @@ router.get("/", isAuthenticate, ordersController.GetUserOrders);
 
 // TODO : Remove testing route
 router.post("/test", isAuthenticate, ordersController.NewOrderTest);
-router.post("/confirmation/test", ordersController.TransactionTest);
 module.exports = router;

@@ -1,28 +1,23 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ").pop();
 
   try {
-    if (!authHeader || !authHeader.startsWith("Bearer" + " "))
-      return res
-        .status(401)
-        .send({ message: "Sessions Expired, Please Login to your Account" });
+    if (!token)
+      return res.status(401).json({
+        success: false,
+        message: "Session expired, Please Login",
+      });
 
-    const token = authHeader.split(" ")[1];
-
-    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
-      if (err) {
-        if (err.name === "TokenExpiredError") {
-          return res.status(401).json({ error: "Token has expired" });
-        } else {
-          return res.sendStatus(403);
-        }
-      }
-      req.user = user;
-      next();
-    });
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
+    req.user = decoded;
+    next();
   } catch (error) {
-    console.log(error.message);
+    res.status(401).json({
+      success: false,
+      message: "Unauthorized !!!",
+    });
   }
 };

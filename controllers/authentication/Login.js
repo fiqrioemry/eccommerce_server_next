@@ -12,7 +12,6 @@ const jwt = require("jsonwebtoken");
 module.exports = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await Users.findOne({
       where: { email },
       include: [
@@ -52,7 +51,7 @@ module.exports = async (req, res) => {
     const accessToken = jwt.sign(
       { userId, userName, userEmail, userRole, storeId, storeName },
       process.env.ACCESS_TOKEN,
-      { expiresIn: "30d" }
+      { expiresIn: "15m" }
     );
 
     const refreshToken = jwt.sign(
@@ -66,21 +65,21 @@ module.exports = async (req, res) => {
     });
 
     if (refreshTokenData) {
-      await refreshTokenData.update({ refreshToken }); // Hanya refreshToken yang diperbarui
+      await refreshTokenData.update({ refreshToken });
     } else {
       await Tokens.create({ userId: user.id, refreshToken });
     }
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Pastikan untuk menggunakan secure di produksi
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 hari
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 30 * 60 * 60 * 1000,
     });
 
     return res.status(200).send({
       message: "Login successful",
       data: {
-        accessToken,
+        accessToken: accessToken,
         user: {
           userId,
           userName,

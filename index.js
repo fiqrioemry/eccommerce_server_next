@@ -12,7 +12,7 @@ const service = require("./routes");
 app.use(cookies());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 app.use("/api/auth", service.AuthRoute);
 app.use("/api/cart", service.CartRoute);

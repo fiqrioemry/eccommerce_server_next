@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       maxAge: 24 * 30 * 60 * 60 * 1000,
     });
 

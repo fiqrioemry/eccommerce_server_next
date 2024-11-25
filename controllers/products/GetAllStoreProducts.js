@@ -15,11 +15,11 @@ module.exports = async (req, res) => {
       include: [
         {
           model: Products,
+          attributes: ["categoryId", "name", "slug", "price"],
           include: [
-            { model: Images },
-            { model: OrderDetails },
-            { model: Reviews },
-            { model: Categories },
+            { model: Images, attributes: ["image"] },
+            { model: Reviews, attributes: ["rating", "comment", "userId"] },
+            { model: Categories, attributes: ["name", "slug", "image"] },
           ],
         },
       ],
@@ -38,26 +38,30 @@ module.exports = async (req, res) => {
       description: store.description,
       image: store.image,
       city: store.city,
-      price: product.price,
-      stock: product.stock,
-      images: product.Images?.map((img) => img.image) || [],
-      sold:
-        product.OrderDetails?.reduce(
-          (total, detail) => total + detail.quantity,
-          0
-        ) || 0,
-      reviews: product.Reviews || [],
-      storeId: product.storeId,
-      storeName: product.Store?.storeName,
-      slugName: product.Store?.slug,
-      storeCity: product.Store?.city || null,
-      storeImage: product.Store?.image || null,
+      products: store.Products?.reduce((acc, curr) => {
+        const { name, categoryId, slug, price, Images, Reviews, Category } =
+          curr;
+        const productImage = Images.map((item) => {
+          return item.image;
+        });
+        acc.push({
+          name,
+          categoryId,
+          slug,
+          price,
+          images: productImage,
+          Reviews,
+          categoryName: Category.name,
+          categorySlug: Category.slug,
+        });
+        return acc;
+      }, []),
     };
 
     return res.status(200).send({
       success: true,
       message: "success",
-      data: product,
+      data: data,
     });
   } catch (error) {
     return res.status(500).send(error.message);

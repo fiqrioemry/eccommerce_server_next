@@ -32,6 +32,7 @@ module.exports = async (req, res) => {
       title: product.name,
       slug: product.slug,
       category: product.Category?.name || null,
+      categorySlug: product.Category?.slug || null,
       description: product.description,
       price: product.price,
       stock: product.stock,

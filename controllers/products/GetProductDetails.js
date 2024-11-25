@@ -5,6 +5,8 @@ const {
   Categories,
   OrderDetails,
   Stores,
+  Users,
+  UserProfiles,
 } = require("../../models");
 
 module.exports = async (req, res) => {
@@ -13,9 +15,18 @@ module.exports = async (req, res) => {
     const product = await Products.findOne({
       where: { slug },
       include: [
-        { model: Images },
-        { model: OrderDetails },
-        { model: Reviews },
+        { model: Images, attributes: ["image"] },
+        {
+          model: Reviews,
+          attributes: ["userId", "rating", "comment", "createdAt"],
+          include: [
+            {
+              model: Users,
+              attributes: ["email"],
+              include: [{ model: UserProfiles, attributes: ["name", "city"] }],
+            },
+          ],
+        },
         { model: Categories },
         { model: Stores },
       ],
@@ -30,7 +41,7 @@ module.exports = async (req, res) => {
     const data = {
       id: product.id,
       title: product.name,
-      slug: product.slug,
+      productSlug: product.slug,
       category: product.Category?.name || null,
       categorySlug: product.Category?.slug || null,
       description: product.description,
@@ -42,10 +53,25 @@ module.exports = async (req, res) => {
           (total, detail) => total + detail.quantity,
           0
         ) || 0,
-      reviews: product.Reviews || [],
+      reviews: product.Reviews?.reduce((acc, curr) => {
+        const { userId, rating, comment, createdAt } = curr;
+        const email = curr.User.email;
+        const customerName = curr.User.UserProfile.name;
+        const customerCity = curr.User.UserProfile.city;
+        acc.push({
+          userId,
+          email,
+          customerName,
+          customerCity,
+          rating,
+          comment,
+          createdAt,
+        });
+        return acc;
+      }, []),
       storeId: product.storeId,
       storeName: product.Store?.storeName,
-      slugName: product.Store?.slug,
+      storeSlug: product.Store?.slug,
       storeCity: product.Store?.city || null,
       storeImage: product.Store?.image || null,
     };

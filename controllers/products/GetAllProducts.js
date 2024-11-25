@@ -105,11 +105,11 @@ module.exports = async (req, res) => {
         id: item.id,
         title: item.name,
         slug: item.slug,
-        category: item.Category.name,
+        category: item.Category.slug,
         description: item.description,
         price: item.price,
         stock: item.stock,
-        images: item.Images.map((item) => item.image),
+        images: item.Images[0].image,
         sold: item?.OrderDetails.reduce(
           (total, item) => (total += item.quantity),
           0
@@ -119,9 +119,9 @@ module.exports = async (req, res) => {
           item.Reviews.length,
         storeId: item.storeId,
         storeName: item.Store.storeName,
+        storeSlug: item.Store.slug,
         storeCity: item.Store.city,
         storeImage: item.Store.image,
-        storeSlug: item.Store.slug,
       };
     });
     return res.status(200).send({

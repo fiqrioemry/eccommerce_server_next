@@ -28,17 +28,16 @@ module.exports = async (req, res) => {
       return {
         id: item.id,
         title: item.name,
-        category: item.Category.name,
-        description: item.description,
+        slug: item.slug,
+        category: item.Category.slug,
         price: item.price,
         stock: item.stock,
-        images: item.Images.map((item) => item.image),
+        images: item.Images[0].image,
         sold: item?.OrderDetails.reduce(
           (total, item) => (total += item.quantity),
           0
         ),
         storeId: item.storeId,
-        storeName: item.Store.storeName,
         storeSlug: item.Store.slug,
         storeImage: item.Store.image,
       };

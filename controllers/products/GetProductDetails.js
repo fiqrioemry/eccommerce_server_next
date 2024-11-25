@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
     const product = await Products.findOne({
       where: { slug },
       include: [
+        { model: OrderDetails },
         { model: Images, attributes: ["image"] },
         {
           model: Reviews,
@@ -41,9 +42,8 @@ module.exports = async (req, res) => {
     const data = {
       id: product.id,
       title: product.name,
-      productSlug: product.slug,
-      category: product.Category?.name || null,
-      categorySlug: product.Category?.slug || null,
+      slug: product.slug,
+      category: product.Category?.slug,
       description: product.description,
       price: product.price,
       stock: product.stock,
@@ -72,8 +72,8 @@ module.exports = async (req, res) => {
       storeId: product.storeId,
       storeName: product.Store?.storeName,
       storeSlug: product.Store?.slug,
-      storeCity: product.Store?.city || null,
-      storeImage: product.Store?.image || null,
+      storeCity: product.Store?.city || [],
+      storeImage: product.Store?.image || [],
     };
 
     return res.status(200).send({

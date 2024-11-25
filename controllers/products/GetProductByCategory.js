@@ -21,7 +21,6 @@ module.exports = async (req, res) => {
         },
         { model: Images },
         { model: Categories },
-        { model: Reviews },
         { model: OrderDetails },
       ],
     });
@@ -38,17 +37,11 @@ module.exports = async (req, res) => {
           (total, item) => (total += item.quantity),
           0
         ),
-        reviews: item.Reviews,
         storeId: item.storeId,
-        storeName: item.storeName,
-        storeCity: item.Store.city,
+        storeName: item.Store.storeName,
+        storeSlug: item.Store.slug,
         storeImage: item.Store.image,
       };
-    });
-    return res.status(200).send({
-      success: true,
-      message: "success",
-      data: data,
     });
     return res.status(200).send({
       success: true,

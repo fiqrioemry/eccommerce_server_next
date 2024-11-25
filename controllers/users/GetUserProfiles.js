@@ -5,6 +5,7 @@ module.exports = async (req, res) => {
     const userId = req.user.userId;
     const user = await Users.findOne({
       where: { id: userId },
+      attributes: ["email"],
       include: [
         { model: UserRoles, attributes: ["name"] },
         {
@@ -21,9 +22,24 @@ module.exports = async (req, res) => {
         .send({ success: false, message: "User not found" });
     }
 
-    return res
-      .status(200)
-      .send({ success: true, message: "success", data: user });
+    const userEmail = user.email;
+    const userRole = user.UserRole?.name;
+    const storeId = user.Store?.id;
+    const storeName = user.Store?.storeName;
+    const userName = user.UserProfile?.name;
+
+    return res.status(200).send({
+      success: true,
+      message: "success",
+      user: {
+        userId,
+        userEmail,
+        userRole,
+        storeId,
+        storeName,
+        userName,
+      },
+    });
   } catch (error) {
     return res.status(500).send(error.message);
   }

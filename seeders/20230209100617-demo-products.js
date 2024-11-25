@@ -1,4 +1,5 @@
 "use strict";
+const createSlug = require("../utils/CreateSlug");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -9,6 +10,7 @@ module.exports = {
         storeId: 1,
         categoryId: 1,
         name: "Mesin Cuci Sharp Electric",
+        slug: createSlug("Mesin Cuci Sharp Electric"),
         description:
           "Mesin cuci dengan teknologi terbaru dari Sharp yang memberikan kualitas cuci terbaik dengan hemat energi.",
         price: 1800000,
@@ -20,6 +22,7 @@ module.exports = {
         storeId: 1,
         categoryId: 1,
         name: "TV Panasonic 14Inch",
+        slug: createSlug("TV Panasonic 14Inch"),
         description:
           "Televisi Panasonic dengan layar 14 inci, kualitas gambar jernih dan hemat energi.",
         price: 1200000,
@@ -31,6 +34,7 @@ module.exports = {
         storeId: 1,
         categoryId: 1,
         name: "Kulkas Samsung 200L",
+        slug: createSlug("Kulkas Samsung 200L"),
         description:
           "Kulkas Samsung dengan kapasitas 200 liter, hemat energi dan desain elegan.",
         price: 3500000,
@@ -42,6 +46,7 @@ module.exports = {
         storeId: 1,
         categoryId: 1,
         name: "Headset Sony Wireless",
+        slug: createSlug("Headset Sony Wireless"),
         description:
           "Headset Sony dengan kualitas suara jernih dan koneksi wireless yang stabil.",
         price: 1200000,
@@ -53,6 +58,7 @@ module.exports = {
         storeId: 1,
         categoryId: 1,
         name: "Speaker JBL Flip 5",
+        slug: createSlug("Speaker JBL Flip 5"),
         description:
           "Speaker portable JBL dengan suara bass yang mantap dan tahan air.",
         price: 1500000,
@@ -65,6 +71,7 @@ module.exports = {
         storeId: 2,
         categoryId: 2,
         name: "Kaos Polo Ralph Lauren",
+        slug: createSlug("Kaos Polo Ralph Lauren"),
         description:
           "Kaos polo dengan desain simpel dari Ralph Lauren, cocok untuk acara casual.",
         price: 700000,
@@ -76,6 +83,7 @@ module.exports = {
         storeId: 2,
         categoryId: 2,
         name: "Jeans Levi's 501",
+        slug: createSlug("Jeans Levi's 501"),
         description:
           "Jeans Levi's 501 dengan potongan klasik, nyaman dipakai sehari-hari.",
         price: 900000,
@@ -87,6 +95,7 @@ module.exports = {
         storeId: 2,
         categoryId: 2,
         name: "Jaket Nike Sports",
+        slug: createSlug("Jaket Nike Sports"),
         description:
           "Jaket Nike Sports dengan bahan yang nyaman dan desain modern untuk aktivitas olahraga.",
         price: 1500000,
@@ -98,6 +107,7 @@ module.exports = {
         storeId: 2,
         categoryId: 2,
         name: "Sepatu Adidas Running",
+        slug: createSlug("Sepatu Adidas Running"),
         description:
           "Sepatu running Adidas, ringan dan nyaman untuk berlari sepanjang hari.",
         price: 1200000,
@@ -109,6 +119,7 @@ module.exports = {
         storeId: 2,
         categoryId: 2,
         name: "Kacamata Ray-Ban Aviator",
+        slug: createSlug("Kacamata Ray-Ban Aviator"),
         description:
           "Kacamata Ray-Ban Aviator yang stylish dan nyaman dipakai, cocok untuk berbagai suasana.",
         price: 2000000,
@@ -122,6 +133,7 @@ module.exports = {
         storeId: 3,
         categoryId: 3,
         name: "Dress Maxi Zara",
+        slug: createSlug("Dress Maxi Zara"),
         description:
           "Dress maxi dari Zara dengan desain elegan dan bahan nyaman untuk berbagai acara.",
         price: 1000000,
@@ -133,6 +145,7 @@ module.exports = {
         storeId: 3,
         categoryId: 3,
         name: "Blouse H&M",
+        slug: createSlug("Blouse H&M"),
         description:
           "Blouse wanita dari H&M dengan desain simpel namun tetap stylish untuk bekerja.",
         price: 400000,
@@ -144,6 +157,7 @@ module.exports = {
         storeId: 3,
         categoryId: 3,
         name: "Skirt Forever 21",
+        slug: createSlug("Skirt Forever 21"),
         description:
           "Skirt Forever 21 dengan bahan yang ringan dan cocok dipadukan dengan berbagai outfit.",
         price: 350000,
@@ -155,6 +169,7 @@ module.exports = {
         storeId: 3,
         categoryId: 3,
         name: "Sweater Uniqlo",
+        slug: createSlug("Sweater Uniqlo"),
         description:
           "Sweater Uniqlo yang nyaman dipakai sepanjang tahun, cocok untuk cuaca dingin.",
         price: 500000,
@@ -166,6 +181,7 @@ module.exports = {
         storeId: 3,
         categoryId: 3,
         name: "High Heels Charles & Keith",
+        slug: createSlug("High Heels Charles & Keith"),
         description:
           "High heels Charles & Keith dengan desain elegan dan cocok untuk berbagai acara formal.",
         price: 1400000,
@@ -180,6 +196,7 @@ module.exports = {
         storeId: 4,
         categoryId: 4,
         name: "Vitamin C Blackmores",
+        slug: createSlug("Vitamin C Blackmores"),
         description:
           "Vitamin C dari Blackmores untuk meningkatkan daya tahan tubuh dan kesehatan kulit.",
         price: 250000,
@@ -191,6 +208,7 @@ module.exports = {
         storeId: 4,
         categoryId: 4,
         name: "Suplemen Protein Herbalife",
+        slug: createSlug("Suplemen Protein Herbalife"),
         description:
           "Suplemen protein Herbalife yang cocok untuk mendukung kebugaran tubuh dan pembentukan otot.",
         price: 500000,
@@ -202,6 +220,7 @@ module.exports = {
         storeId: 4,
         categoryId: 4,
         name: "Minyak Zaitun Habbatussauda",
+        slug: createSlug("Minyak Zaitun Habbatussauda"),
         description:
           "Minyak Zaitun dengan campuran Habbatussauda untuk kesehatan tubuh.",
         price: 150000,
@@ -213,6 +232,7 @@ module.exports = {
         storeId: 4,
         categoryId: 4,
         name: "Alpukat Organik",
+        slug: createSlug("Alpukat Organik"),
         description:
           "Alpukat organik dengan rasa yang creamy dan manfaat yang luar biasa untuk kesehatan.",
         price: 30000,
@@ -224,6 +244,7 @@ module.exports = {
         storeId: 4,
         categoryId: 4,
         name: "Kapsul Ekstrak Kunyit",
+        slug: createSlug("Kapsul Ekstrak Kunyit"),
         description:
           "Kapsul ekstrak kunyit yang memiliki manfaat anti inflamasi dan membantu meningkatkan sistem pencernaan.",
         price: 100000,
@@ -237,6 +258,7 @@ module.exports = {
         storeId: 5,
         categoryId: 5,
         name: "Serum Skincare L'oreal",
+        slug: createSlug("Serum Skincare L'oreal"),
         description:
           "Serum skincare L'oreal dengan bahan aktif yang membantu mencerahkan kulit dan mengurangi kerutan.",
         price: 450000,
@@ -248,6 +270,7 @@ module.exports = {
         storeId: 5,
         categoryId: 5,
         name: "Lipstik Maybelline",
+        slug: createSlug("Lipstik Maybelline"),
         description:
           "Lipstik dari Maybelline dengan berbagai pilihan warna yang tahan lama dan nyaman di bibir.",
         price: 120000,
@@ -259,6 +282,7 @@ module.exports = {
         storeId: 5,
         categoryId: 5,
         name: "Shampo Pantene",
+        slug: createSlug("Shampo Pantene"),
         description:
           "Shampo Pantene dengan formula yang membantu menjaga kesehatan rambut dan kulit kepala.",
         price: 100000,
@@ -270,6 +294,7 @@ module.exports = {
         storeId: 5,
         categoryId: 5,
         name: "Masker Wajah The Body Shop",
+        slug: createSlug("Masker Wajah The Body Shop"),
         description:
           "Masker wajah dari The Body Shop dengan bahan alami untuk memberikan kelembapan pada kulit.",
         price: 250000,
@@ -281,6 +306,7 @@ module.exports = {
         storeId: 5,
         categoryId: 5,
         name: "Parfum Calvin Klein",
+        slug: createSlug("Parfum Calvin Klein"),
         description:
           "Parfum Calvin Klein dengan aroma segar dan tahan lama, cocok untuk aktivitas sehari-hari.",
         price: 850000,
@@ -294,6 +320,7 @@ module.exports = {
         storeId: 6,
         categoryId: 6,
         name: "Smartphone Samsung Galaxy S23",
+        slug: createSlug("Smartphone Samsung Galaxy S23"),
         description:
           "Smartphone Samsung Galaxy S23 dengan layar besar, performa tinggi dan kamera canggih untuk pengalaman terbaik.",
         price: 10000000,
@@ -305,6 +332,7 @@ module.exports = {
         storeId: 6,
         categoryId: 6,
         name: "iPad Pro 12.9 inch",
+        slug: createSlug("iPad Pro 12.9 inch"),
         description:
           "iPad Pro 12.9 inci dengan layar Liquid Retina, ideal untuk bekerja, berkreasi, dan hiburan.",
         price: 16000000,
@@ -316,6 +344,7 @@ module.exports = {
         storeId: 6,
         categoryId: 6,
         name: "Samsung Galaxy Tab A8",
+        slug: createSlug("Samsung Galaxy Tab A8"),
         description:
           "Tablet Samsung Galaxy Tab A8 dengan layar besar dan baterai tahan lama untuk hiburan seharian.",
         price: 3500000,
@@ -327,6 +356,7 @@ module.exports = {
         storeId: 6,
         categoryId: 6,
         name: "Smartphone Xiaomi Redmi Note 12",
+        slug: createSlug("Smartphone Xiaomi Redmi Note 12"),
         description:
           "Smartphone Xiaomi Redmi Note 12 dengan harga terjangkau dan performa mumpuni untuk segala aktivitas.",
         price: 3000000,
@@ -338,6 +368,7 @@ module.exports = {
         storeId: 6,
         categoryId: 6,
         name: "Samsung Galaxy Z Fold 5",
+        slug: createSlug("Samsung Galaxy Z Fold 5"),
         description:
           "Smartphone lipat Samsung Galaxy Z Fold 5 dengan layar besar dan desain futuristik, nyaman untuk multitasking.",
         price: 30000000,
@@ -351,6 +382,7 @@ module.exports = {
         storeId: 7,
         categoryId: 7,
         name: "Laptop ASUS VivoBook 15",
+        slug: createSlug("Laptop ASUS VivoBook 15"),
         description:
           "Laptop ASUS VivoBook 15 dengan performa tinggi untuk bekerja dan hiburan seharian.",
         price: 7000000,
@@ -362,6 +394,7 @@ module.exports = {
         storeId: 7,
         categoryId: 7,
         name: "MacBook Air M2",
+        slug: createSlug("MacBook Air M2"),
         description:
           "MacBook Air M2 dengan desain tipis dan performa canggih, cocok untuk kebutuhan profesional dan hiburan.",
         price: 18000000,
@@ -373,6 +406,7 @@ module.exports = {
         storeId: 7,
         categoryId: 7,
         name: "Laptop Lenovo ThinkPad X1 Carbon",
+        slug: createSlug("Laptop Lenovo ThinkPad X1 Carbon"),
         description:
           "Laptop Lenovo ThinkPad X1 Carbon dengan desain premium dan performa hebat, cocok untuk bekerja dengan serius.",
         price: 22000000,
@@ -384,6 +418,7 @@ module.exports = {
         storeId: 7,
         categoryId: 7,
         name: "HP Pavilion x360",
+        slug: createSlug("HP Pavilion x360"),
         description:
           "HP Pavilion x360 dengan layar sentuh dan desain convertible, cocok untuk bekerja dan belajar.",
         price: 8000000,
@@ -395,6 +430,7 @@ module.exports = {
         storeId: 7,
         categoryId: 7,
         name: "Laptop Dell Inspiron 15",
+        slug: createSlug("Laptop Dell Inspiron 15"),
         description:
           "Laptop Dell Inspiron 15 dengan harga terjangkau dan fitur lengkap untuk belajar dan bekerja.",
         price: 6500000,
@@ -408,6 +444,7 @@ module.exports = {
         storeId: 8,
         categoryId: 8,
         name: "Buku Novel Harry Potter",
+        slug: createSlug("Buku Novel Harry Potter"),
         description:
           "Novel Harry Potter seri pertama dengan cerita magis yang menarik bagi semua kalangan.",
         price: 150000,
@@ -419,6 +456,7 @@ module.exports = {
         storeId: 8,
         categoryId: 8,
         name: "Buku Motivasi The Power of Habit",
+        slug: createSlug("Buku Motivasi The Power of Habit"),
         description:
           "Buku tentang kebiasaan dan kekuatan pikiran untuk mengubah hidup Anda.",
         price: 120000,
@@ -430,6 +468,7 @@ module.exports = {
         storeId: 8,
         categoryId: 8,
         name: "Buku Bisnis Sukses Milenial",
+        slug: createSlug("Buku Bisnis Sukses Milenial"),
         description:
           "Buku yang menginspirasi generasi milenial untuk meraih kesuksesan melalui bisnis dan usaha.",
         price: 180000,
@@ -441,6 +480,7 @@ module.exports = {
         storeId: 8,
         categoryId: 8,
         name: "Buku Kesehatan Mindfulness",
+        slug: createSlug("Buku Kesehatan Mindfulness"),
         description:
           "Buku Mindfulness untuk membantu menenangkan pikiran dan meningkatkan kualitas hidup.",
         price: 100000,
@@ -452,6 +492,7 @@ module.exports = {
         storeId: 8,
         categoryId: 8,
         name: "Buku Teknik Pemrograman Python",
+        slug: createSlug("Buku Teknik Pemrograman Python"),
         description:
           "Buku panduan lengkap untuk belajar pemrograman menggunakan bahasa Python.",
         price: 250000,
@@ -465,6 +506,7 @@ module.exports = {
         storeId: 9,
         categoryId: 9,
         name: "Susu UHT Full Cream",
+        slug: createSlug("Susu UHT Full Cream"),
         description:
           "Susu UHT full cream yang lezat, cocok untuk segala usia dan kaya akan nutrisi.",
         price: 25000,
@@ -476,6 +518,7 @@ module.exports = {
         storeId: 9,
         categoryId: 9,
         name: "Kopi Arabika Sumatera",
+        slug: createSlug("Kopi Arabika Sumatera"),
         description:
           "Kopi Arabika Sumatera dengan rasa yang khas dan keasaman yang rendah, sempurna untuk penyuka kopi sejati.",
         price: 75000,
@@ -487,6 +530,7 @@ module.exports = {
         storeId: 9,
         categoryId: 9,
         name: "Mie Instan Goreng",
+        slug: createSlug("Mie Instan Goreng"),
         description:
           "Mie instan goreng dengan rasa pedas yang menggugah selera dan cocok untuk makan cepat.",
         price: 5000,
@@ -498,6 +542,7 @@ module.exports = {
         storeId: 9,
         categoryId: 9,
         name: "Teh Botol Sosro",
+        slug: createSlug("Teh Botol Sosro"),
         description:
           "Teh Botol Sosro dengan rasa manis dan teh yang segar, nikmat untuk menemani waktu santai.",
         price: 10000,
@@ -509,6 +554,7 @@ module.exports = {
         storeId: 9,
         categoryId: 9,
         name: "Coklat Coklat",
+        slug: createSlug("Coklat Coklat"),
         description:
           "Coklat Coklat dengan rasa manis yang kaya dan tekstur lembut, cocok untuk pencinta coklat.",
         price: 30000,
@@ -521,6 +567,7 @@ module.exports = {
         storeId: 10,
         categoryId: 10,
         name: "Pensil Faber-Castell",
+        slug: createSlug("Pensil Faber-Castell"),
         description:
           "Pensil Faber-Castell dengan kualitas terbaik, cocok untuk menulis dan menggambar.",
         price: 5000,
@@ -532,6 +579,7 @@ module.exports = {
         storeId: 10,
         categoryId: 10,
         name: "Buku Catatan Moleskine",
+        slug: createSlug("Buku Catatan Moleskine"),
         description:
           "Buku catatan Moleskine dengan desain elegan, cocok untuk menulis ide dan catatan penting.",
         price: 250000,
@@ -543,6 +591,7 @@ module.exports = {
         storeId: 10,
         categoryId: 10,
         name: "Stapler 3M",
+        slug: createSlug("Stapler 3M"),
         description:
           "Stapler 3M dengan desain ergonomis dan daya tahan tinggi untuk keperluan kantor.",
         price: 100000,
@@ -554,6 +603,7 @@ module.exports = {
         storeId: 10,
         categoryId: 10,
         name: "Pulpen Pilot G-2",
+        slug: createSlug("Pulpen Pilot G-2"),
         description:
           "Pulpen Pilot G-2 dengan tinta yang halus dan nyaman digunakan untuk menulis panjang.",
         price: 30000,
@@ -565,6 +615,7 @@ module.exports = {
         storeId: 10,
         categoryId: 10,
         name: "Kertas HVS A4",
+        slug: createSlug("Kertas HVS A4"),
         description:
           "Kertas HVS A4 dengan kualitas tinggi untuk kebutuhan printing dan dokumen kantor.",
         price: 50000,

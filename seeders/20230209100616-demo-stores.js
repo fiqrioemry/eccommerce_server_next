@@ -1,4 +1,5 @@
 "use strict";
+const createSlug = require("../utils/CreateSlug");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -7,6 +8,7 @@ module.exports = {
       {
         userId: 1,
         storeName: "TechVerse Electronics",
+        slug: createSlug("TechVerse Electronics"),
         description:
           "Innovative electronics that redefine your tech experience.",
         createdAt: new Date(),
@@ -18,6 +20,7 @@ module.exports = {
       {
         userId: 2,
         storeName: "UrbanVibe Men’s Fashion",
+        slug: createSlug("UrbanVibe Men’s Fashion"),
         description: "Bold styles and timeless designs for the modern man.",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -28,6 +31,7 @@ module.exports = {
       {
         userId: 3,
         storeName: "LuxeAura Women’s Fashion",
+        slug: createSlug("LuxeAura Women’s Fashion"),
         description:
           "Chic and elegant clothing for every woman who loves to shine.",
         createdAt: new Date(),
@@ -39,6 +43,7 @@ module.exports = {
       {
         userId: 4,
         storeName: "PureEssence Health",
+        slug: createSlug("PureEssence Health"),
         description: "Wellness products that nurture your body and soul.",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -49,6 +54,7 @@ module.exports = {
       {
         userId: 5,
         storeName: "GlowUp Beauty",
+        slug: createSlug("GlowUp Beauty"),
         description: "Beauty products that bring out your natural glow.",
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -59,6 +65,7 @@ module.exports = {
       {
         userId: 6,
         storeName: "GizmoHub Phones & Tablets",
+        slug: createSlug("GizmoHub Phones & Tablets"),
         description:
           "Latest smartphones and tablets to elevate your digital life.",
         createdAt: new Date(),
@@ -70,6 +77,7 @@ module.exports = {
       {
         userId: 7,
         storeName: "PowerUp Laptops",
+        slug: createSlug("PowerUp Laptops"),
         description:
           "High-performance laptops and computers built for speed and power.",
         createdAt: new Date(),
@@ -81,6 +89,7 @@ module.exports = {
       {
         userId: 8,
         storeName: "BookNest",
+        slug: createSlug("BookNest"),
         description:
           "Dive into an endless world of literature with our curated selection of books.",
         createdAt: new Date(),
@@ -92,6 +101,7 @@ module.exports = {
       {
         userId: 9,
         storeName: "SavorDelights Food & Drink",
+        slug: createSlug("SavorDelights Food & Drink"),
         description:
           "Fresh, delicious food and beverages delivered straight to you.",
         createdAt: new Date(),
@@ -103,6 +113,7 @@ module.exports = {
       {
         userId: 10,
         storeName: "OfficePrime",
+        slug: createSlug("OfficePrime"),
         description:
           "Quality office supplies that help you stay productive and organized.",
         createdAt: new Date(),

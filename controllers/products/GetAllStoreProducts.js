@@ -10,29 +10,34 @@ const {
 module.exports = async (req, res) => {
   try {
     const { slug } = req.params;
-    const product = await Products.findOne({
+    const store = await Stores.findOne({
       where: { slug },
       include: [
-        { model: Images },
-        { model: OrderDetails },
-        { model: Reviews },
-        { model: Categories },
-        { model: Stores },
+        {
+          model: Products,
+          include: [
+            { model: Images },
+            { model: OrderDetails },
+            { model: Reviews },
+            { model: Categories },
+          ],
+        },
       ],
     });
 
-    if (!product)
+    if (!store)
       return res.status(400).send({
         success: false,
-        message: "Product not found",
+        message: "Store not found",
       });
 
     const data = {
-      id: product.id,
-      title: product.name,
-      slug: product.slug,
-      category: product.Category?.name || null,
-      description: product.description,
+      storeId: store.id,
+      title: store.storeName,
+      storeSlug: store.slug,
+      description: store.description,
+      image: store.image,
+      city: store.city,
       price: product.price,
       stock: product.stock,
       images: product.Images?.map((img) => img.image) || [],
@@ -52,7 +57,7 @@ module.exports = async (req, res) => {
     return res.status(200).send({
       success: true,
       message: "success",
-      data: data,
+      data: product,
     });
   } catch (error) {
     return res.status(500).send(error.message);

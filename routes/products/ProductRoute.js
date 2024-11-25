@@ -4,7 +4,8 @@ const { isAuthenticate, FileUpload } = require("../../middleware");
 const router = express.Router();
 
 router.get("/", productsController.GetAllProducts);
-router.get("/:id", productsController.GetProductDetails);
+router.get("/:slug", productsController.GetProductDetails);
+router.get("/store/:slug", productsController.GetAllStoreProducts);
 router.get("/category/:slug", productsController.GetProductByCategory);
 
 router.delete("/delete", isAuthenticate, productsController.DeleteProducts);

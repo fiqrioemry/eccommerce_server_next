@@ -104,6 +104,7 @@ module.exports = async (req, res) => {
       return {
         id: item.id,
         title: item.name,
+        slug: item.slug,
         category: item.Category.name,
         description: item.description,
         price: item.price,
@@ -117,9 +118,10 @@ module.exports = async (req, res) => {
           item.Reviews.reduce((total, acc) => (total += acc.rating), 0) /
           item.Reviews.length,
         storeId: item.storeId,
-        storeName: item.storeName,
+        storeName: item.Store.storeName,
         storeCity: item.Store.city,
         storeImage: item.Store.image,
+        storeSlug: item.Store.slug,
       };
     });
     return res.status(200).send({

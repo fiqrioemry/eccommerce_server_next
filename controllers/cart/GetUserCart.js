@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
       include: [
         {
           model: Products,
-          attributes: ["id", "name", "price", "storeId", "stock"],
+          attributes: ["id", "name", "slug", "price", "storeId", "stock"],
           include: [
             {
               model: Images,
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
             },
             {
               model: Stores,
-              attributes: ["storeName", "image", "city"],
+              attributes: ["storeName", "image", "city", "slug"],
             },
           ],
         },
@@ -31,12 +31,14 @@ module.exports = async (req, res) => {
         id: item.id,
         quantity: item.quantity,
         productId: item.Product?.id,
-        storeId: item.Product?.storeId,
         name: item.Product?.name,
+        slug: item.Product?.slug,
         price: item.Product?.price,
         stock: item.Product?.stock,
-        images: item.Product?.Images.map((item) => item.image),
+        images: item.Product?.Images[0].image,
+        storeId: item.Product?.storeId,
         storeName: item.Product?.Store?.storeName,
+        storeSlug: item.Product?.Store?.slug,
         storeImage: item.Product?.Store?.image,
         storeCity: item.Product?.Store?.city,
       };

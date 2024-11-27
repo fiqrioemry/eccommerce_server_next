@@ -46,9 +46,10 @@ module.exports = async (req, res) => {
       const newQuantity = cartItem.quantity + quantity;
 
       if (newQuantity > product.stock) {
-        return res
-          .status(400)
-          .send({ success: false, message: "Product out of stock" });
+        return res.status(400).send({
+          success: false,
+          message: `Remaining Stock is ${product.stock}. You already have ${cartItem.quantity} in your cart `,
+        });
       }
 
       await cartItem.update({ quantity: newQuantity });

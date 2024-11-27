@@ -30,7 +30,6 @@ module.exports = async (req, res) => {
     return res.status(200).send({
       success: true,
       message: "Cart quantity updated",
-      data: cartItem,
     });
   } catch (error) {
     return res.status(500).send({ message: error.message });

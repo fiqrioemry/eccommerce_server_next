@@ -1,11 +1,4 @@
-const {
-  Products,
-  Images,
-  Reviews,
-  Categories,
-  OrderDetails,
-  Stores,
-} = require("../../models");
+const { Products, Images, Categories, Stores } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
@@ -18,7 +11,6 @@ module.exports = async (req, res) => {
           attributes: ["categoryId", "name", "slug", "price"],
           include: [
             { model: Images, attributes: ["image"] },
-            { model: Reviews, attributes: ["rating", "comment", "userId"] },
             { model: Categories, attributes: ["name", "slug", "image"] },
           ],
         },
@@ -33,25 +25,19 @@ module.exports = async (req, res) => {
 
     const data = {
       storeId: store.id,
-      title: store.storeName,
+      storeName: store.storeName,
       storeSlug: store.slug,
       description: store.description,
-      image: store.image,
-      city: store.city,
+      storeImage: store.image,
+      storeCity: store.city,
       products: store.Products?.reduce((acc, curr) => {
-        const { name, categoryId, slug, price, Images, Reviews, Category } =
-          curr;
-        const productImage = Images.map((item) => {
-          return item.image;
-        });
+        const { name, slug, price, Images, Category } = curr;
+        const productImage = Images[0].image;
         acc.push({
           name,
-          categoryId,
           slug,
           price,
           images: productImage,
-          Reviews,
-          categoryName: Category.name,
           categorySlug: Category.slug,
         });
         return acc;

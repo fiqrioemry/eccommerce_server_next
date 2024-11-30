@@ -3,10 +3,10 @@ const { Carts } = require("../../models");
 module.exports = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { productId } = req.params;
+    const { id } = req.params;
 
     const cart = await Carts.findOne({
-      where: { productId, userId },
+      where: { id, userId },
     });
 
     if (!cart) {

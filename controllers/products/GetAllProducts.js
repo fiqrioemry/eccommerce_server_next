@@ -6,12 +6,14 @@ const {
   Categories,
   Reviews,
   OrderDetails,
+  Sequelize,
 } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
     const {
       search,
+      city,
       category,
       minPrice,
       maxPrice,
@@ -46,6 +48,20 @@ module.exports = async (req, res) => {
       }
     }
 
+    if (city) {
+      const found = await Stores.findOne({
+        where: {
+          city: Array.isArray(city) ? { [Op.in]: city } : city, // Tangani multiple values
+        },
+      });
+
+      if (found) {
+        query.storeId = found.id;
+      } else {
+        return res.status(404).send({ message: "Product not found" });
+      }
+    }
+
     if (minPrice && maxPrice) {
       query.price = {
         [Op.between]: [minPrice, maxPrice],
@@ -57,20 +73,6 @@ module.exports = async (req, res) => {
     } else if (maxPrice) {
       query.price = {
         [Op.lte]: maxPrice,
-      };
-    }
-
-    if (minScore && maxScore) {
-      query.rating = {
-        [Op.between]: [minScore, maxScore],
-      };
-    } else if (minScore) {
-      query.rating = {
-        [Op.gte]: [minScore],
-      };
-    } else if (maxScore) {
-      query.rating = {
-        [Op.lte]: [maxScore],
       };
     }
 
@@ -87,6 +89,18 @@ module.exports = async (req, res) => {
         { model: OrderDetails },
         { model: Reviews },
       ],
+      attributes: {
+        include: [
+          [
+            Sequelize.fn("AVG", Sequelize.col("Reviews.rating")),
+            "averageScore",
+          ],
+        ],
+      },
+      having: {
+        ...(minScore && { averageScore: { [Op.gte]: minScore } }),
+        ...(maxScore && { averageScore: { [Op.lte]: maxScore } }),
+      },
       distinct: true,
       order: [[sortBy || "createdAt", order || "asc"]],
     });

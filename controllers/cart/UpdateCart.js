@@ -20,12 +20,17 @@ module.exports = async (req, res) => {
         .status(400)
         .send({ success: false, message: "Product not found" });
 
-    if (quantity > product.stock)
+    if (cartItem.quantity + quantity === 0)
+      return res
+        .status(400)
+        .send({ success: false, message: "Minimum quantity is 1" });
+
+    if (cartItem.quantity + quantity > product.stock)
       return res
         .status(400)
         .send({ success: false, message: "Product out of stock" });
 
-    await cartItem.update({ quantity });
+    await cartItem.update({ quantity: cartItem.quantity + quantity });
 
     return res.status(200).send({
       success: true,

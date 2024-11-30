@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       sortBy,
       order,
     } = req.query;
-
+    console.log(city);
     const dataPerPage = parseInt(limit) || 8;
     const currentPage = parseInt(page) || 1;
     const offset = (currentPage - 1) * dataPerPage;
@@ -49,16 +49,17 @@ module.exports = async (req, res) => {
     }
 
     if (city) {
-      const found = await Stores.findOne({
+      const foundStores = await Stores.findAll({
         where: {
-          city: Array.isArray(city) ? { [Op.in]: city } : city, // Tangani multiple values
+          city: Array.isArray(city) ? { [Op.in]: city } : city,
         },
       });
-
-      if (found) {
-        query.storeId = found.id;
+      if (foundStores.length > 0) {
+        query.storeId = { [Op.in]: foundStores.map((store) => store.id) };
       } else {
-        return res.status(404).send({ message: "Product not found" });
+        return res
+          .status(404)
+          .send({ message: "Stores not found in the specified cities" });
       }
     }
 
@@ -82,25 +83,15 @@ module.exports = async (req, res) => {
       offset: offset,
       include: [
         {
-          model: Stores,
+          model: Reviews,
+          attributes: ["rating"],
         },
+        { model: Stores },
+
         { model: Images },
         { model: Categories },
         { model: OrderDetails },
-        { model: Reviews },
       ],
-      attributes: {
-        include: [
-          [
-            Sequelize.fn("AVG", Sequelize.col("Reviews.rating")),
-            "averageScore",
-          ],
-        ],
-      },
-      having: {
-        ...(minScore && { averageScore: { [Op.gte]: minScore } }),
-        ...(maxScore && { averageScore: { [Op.lte]: maxScore } }),
-      },
       distinct: true,
       order: [[sortBy || "createdAt", order || "asc"]],
     });
@@ -128,9 +119,7 @@ module.exports = async (req, res) => {
           (total, item) => (total += item.quantity),
           0
         ),
-        averageScore:
-          item.Reviews.reduce((total, acc) => (total += acc.rating), 0) /
-          item.Reviews.length,
+        averageScore: item.dataValues.averageScore, // Pastikan averageScore ada di item
         storeId: item.storeId,
         storeName: item.Store.storeName,
         storeSlug: item.Store.slug,

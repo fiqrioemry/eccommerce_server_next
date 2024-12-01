@@ -6,7 +6,6 @@ const {
   Categories,
   Reviews,
   OrderDetails,
-  Sequelize,
 } = require("../../models");
 
 module.exports = async (req, res) => {
@@ -17,14 +16,14 @@ module.exports = async (req, res) => {
       category,
       minPrice,
       maxPrice,
-      minScore,
-      maxScore,
+      minRating,
+      maxRating,
       limit,
       page,
       sortBy,
       order,
     } = req.query;
-    console.log(city);
+
     const dataPerPage = parseInt(limit) || 8;
     const currentPage = parseInt(page) || 1;
     const offset = (currentPage - 1) * dataPerPage;
@@ -33,7 +32,7 @@ module.exports = async (req, res) => {
     if (search) {
       query[Op.or] = [
         { name: { [Op.like]: `%${search}%` } },
-        { description: { [Op.like]: `${search}` } },
+        { description: { [Op.like]: `%${search}%` } },
       ];
     }
 
@@ -77,65 +76,79 @@ module.exports = async (req, res) => {
       };
     }
 
-    const product = await Products.findAndCountAll({
+    // Query ke database
+    const product = await Products.findAll({
       where: query,
-      limit: dataPerPage,
-      offset: offset,
       include: [
         {
           model: Reviews,
           attributes: ["rating"],
         },
         { model: Stores },
-
         { model: Images },
         { model: Categories },
         { model: OrderDetails },
       ],
-      distinct: true,
       order: [[sortBy || "createdAt", order || "asc"]],
     });
 
-    if (product.count === 0) {
+    if (!product.length) {
       return res.status(404).send({ message: "Product not found" });
     }
-    const totalPage = Math.ceil(product.count / dataPerPage);
+
+    // Proses hasil query untuk filter minRating dan maxRating
+    const filteredData = product
+      .map((item) => {
+        const averageScore =
+          item.Reviews.length > 0
+            ? item.Reviews.reduce((acc, curr) => acc + curr.rating, 0) /
+              item.Reviews.length
+            : 0;
+
+        return {
+          id: item.id,
+          title: item.name,
+          slug: item.slug,
+          category: item.Category.slug,
+          description: item.description,
+          price: item.price,
+          stock: item.stock,
+          images: item.Images[0]?.image || null,
+          sold: item?.OrderDetails.reduce(
+            (total, detail) => (total += detail.quantity),
+            0
+          ),
+          averageScore,
+          storeId: item.storeId,
+          storeName: item.Store.storeName,
+          storeSlug: item.Store.slug,
+          storeCity: item.Store.city,
+          storeImage: item.Store.image,
+        };
+      })
+      .filter(
+        (item) =>
+          (!minRating || item.averageScore >= minRating) &&
+          (!maxRating || item.averageScore <= maxRating)
+      );
+
+    // Pagination setelah filter
+    const paginatedData = filteredData.slice(offset, offset + dataPerPage);
+    const totalProducts = filteredData.length;
+    const totalPage = Math.ceil(totalProducts / dataPerPage);
 
     if (currentPage > totalPage || currentPage < 1) {
       return res.status(404).send({ message: "Page not found" });
     }
 
-    const data = product.rows.map((item) => {
-      return {
-        id: item.id,
-        title: item.name,
-        slug: item.slug,
-        category: item.Category.slug,
-        description: item.description,
-        price: item.price,
-        stock: item.stock,
-        images: item.Images[0].image,
-        sold: item?.OrderDetails.reduce(
-          (total, item) => (total += item.quantity),
-          0
-        ),
-        averageScore: item.dataValues.averageScore, // Pastikan averageScore ada di item
-        storeId: item.storeId,
-        storeName: item.Store.storeName,
-        storeSlug: item.Store.slug,
-        storeCity: item.Store.city,
-        storeImage: item.Store.image,
-      };
-    });
     return res.status(200).send({
       success: true,
       message: "success",
-      data: data,
-      totalProducts: product.count,
+      data: paginatedData,
+      totalProducts,
       currentPage,
       dataPerPage,
       totalPage,
-      offset,
     });
   } catch (error) {
     return res.status(500).send(error.message);

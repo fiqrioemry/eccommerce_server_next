@@ -24,6 +24,8 @@ module.exports = async (req, res) => {
   const userId = req.user.userId;
   const { orderCartId, customerAddress } = req.body;
 
+  // [shipmentCost : 99, ]
+
   try {
     const user = await Users.findOne({
       where: { id: userId },
